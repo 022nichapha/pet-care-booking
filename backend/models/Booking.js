@@ -1,0 +1,16 @@
+const mongoose = require('mongoose');
+
+const bookingSchema = new mongoose.Schema({
+    customerName: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    appointmentDate: { type: Date, required: true },
+    status: { type: String, default: 'pending' },
+    // การสร้างความสัมพันธ์ (Reference) ไปยัง Services
+    serviceId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Service', 
+        required: true 
+    }
+});
+
+module.exports = mongoose.model('Booking', bookingSchema);
