@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" rx="12" fill="#f8fafc" />
+  <circle cx="100" cy="100" r="70" fill="#ffffff" />
+  <!-- Eyes -->
+  <circle cx="70" cy="85" r="14" fill="#0f172a" />
+  <circle cx="130" cy="85" r="14" fill="#0f172a" />
+  <!-- Mouth / snout -->
+  <path d="M60 120c12-6 36-18 40-18s28 12 40 18" stroke="#0f172a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <!-- Ear hints -->
+  <path d="M40 60c8-12 28-20 40-12" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <path d="M160 60c-8-12-28-20-40-12" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+</svg>

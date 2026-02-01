@@ -1,20 +1,31 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  // 1. เพิ่มการสแกนไฟล์ให้ครอบคลุมมากขึ้น
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // สแกนทุกไฟล์ในโฟลเดอร์ src ที่เป็น js, jsx, ts, tsx
+    "./src/**/*.{js,ts,jsx,tsx}", 
   ],
   theme: {
     extend: {
-      // คุณสามารถเพิ่มสี หรือ ฟอนต์ สำหรับ Pet Care ของคุณตรงนี้ได้
       colors: {
-        'brand-primary': '#5D5FEF', 
-        'light-blue': '#bfdbfe',
-        'light-yellow': '#fefbb6',
-        'pet-blue': '#60a5fa',
-        'pet-yellow': '#fde047',
+        'pet-yellow': {
+          50: '#fff9e6',
+          100: '#fff3cc',
+          400: '#fbbf24', // เพิ่มสีหลักสำหรับปุ่ม
+          500: '#f59e0b',
+        },
+        'pet-blue': {
+          50: '#e6fbff',
+          100: '#ccf7ff',
+          400: '#60a5fa', // เพิ่มสีหลักสำหรับปุ่ม
+          600: '#2563eb',
+        }
+      },
+      // 2. เพิ่ม Animation สำหรับตกแต่ง (Optional)
+      animation: {
+        'bounce-slow': 'bounce 3s infinite',
       }
-    },
+    }
   },
-  plugins: [],
-}
+  plugins: []
+};

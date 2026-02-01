@@ -1,43 +1,45 @@
+require('dotenv').config(); 
+
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db.js'); // ตรวจสอบว่ามีไฟล์นี้จริง
-const jwt = require('jsonwebtoken');
+const connectDB = require('./config/db');
 
-dotenv.config();
-
-// --- เพิ่มบรรทัดนี้เพื่อเชื่อมต่อ MongoDB ---
-connectDB(); 
+// 2. Import Routes (แก้ไข Path ให้ถูกต้อง)
+// ต้องมั่นใจว่าคุณสร้างไฟล์ authRoutes.js ไว้ในโฟลเดอร์ routes แล้ว
+const authRoutes = require('./routes/authRoutes'); 
+const serviceRoutes = require('./routes/serviceRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
+const path = require('path');
 
 const app = express();
 
-app.use(cors()); 
+// 3. เชื่อมต่อฐานข้อมูล
+connectDB();
+
+// 4. Middlewares
+app.use(cors());
 app.use(express.json());
+// Serve uploaded files
+const uploadPath = process.env.UPLOAD_PATH || './uploads';
+app.use('/uploads', express.static(path.resolve(uploadPath)));
 
-// Middleware to verify JWT token
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+// 5. Routes Definition
+// ระบบจะตรวจสอบว่าไฟล์ Router ที่ Import มาพร้อมใช้งานหรือไม่
+if (authRoutes) app.use('/api/auth', authRoutes);
+if (serviceRoutes) app.use('/api/services', serviceRoutes);
+if (bookingRoutes) app.use('/api/bookings', bookingRoutes);
+if (uploadRoutes) app.use('/api/uploads', uploadRoutes);
 
-  if (!token) {
-    return res.status(401).json({ message: 'Access token is required' });
-  }
+// 6. Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Internal Server Error:", err.stack);
+    res.status(500).json({ message: 'เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์' });
+});
 
-  jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key-default', (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' });
-    }
-    req.userId = user.userId;
-    next();
-  });
-};
-
-// Auth Routes
-app.use('/api/auth', require('./routes/authRoutes'));
-
-// Business Logic Routes
-app.use('/api/services', require('./routes/serviceRoutes'));
-app.use('/api/bookings', require('./routes/bookingRoutes'));
-
+// 7. Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Server is flying on port ${PORT}`);
+    console.log(`📌 API Base URL: http://localhost:${PORT}/api`);
+});
